@@ -1,8 +1,11 @@
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Relationship
+from typing import List, Optional
 
 class Producto(SQLModel, table=True):
-    id: int = Field(primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True)    
     nombre: str = Field()
     descripcion: str = Field()
-    cantidad: int = Field()
+    stock: int = Field()
     precio: float = Field()
+
+ventas: List["VentaProducto"] = Relationship(back_populates="producto")
