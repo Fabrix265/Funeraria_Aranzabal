@@ -1,7 +1,9 @@
 from sqlmodel import SQLModel, Field, Relationship
-from typing import List, Optional, TYPE_CHECKING
+from typing import List, Optional
 from datetime import date
 from enum import Enum
+
+from src.models.fallecido import Fallecido
 
 class TipoPago(str, Enum):
     directo = "directo"
@@ -31,5 +33,7 @@ class Servicio(SQLModel, table=True):
     ataud: Optional["Ataud"] = Relationship(back_populates="servicios")
     capilla: "Capilla" = Relationship(back_populates="servicios")
     contratante: "Contratante" = Relationship(back_populates="servicios")
-    fallecido: "Fallecido" = Relationship(back_populates="servicios")
+
+    fallecido: "Fallecido" = Relationship(back_populates="servicio")
+
     vehiculos_asignados: List["ServicioVehiculo"] = Relationship(back_populates="servicio")
