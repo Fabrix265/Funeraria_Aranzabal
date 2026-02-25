@@ -7,5 +7,3 @@ class Producto(SQLModel, table=True):
     descripcion: str = Field()
     stock: int = Field()
     precio: float = Field()
-
-ventas: List["VentaProducto"] = Relationship(back_populates="producto")
