@@ -45,7 +45,6 @@ def editar_mi_perfil(
     db: SessionDep, 
     token: dict = Depends(decode_token)
 ):
-    # Extraemos el ID del token (campo 'sub')
     user_id = int(token.get("sub"))
     
     return UserService.actualizar_perfil(db, user_id, user_in)

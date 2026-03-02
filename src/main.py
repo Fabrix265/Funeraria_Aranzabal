@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordBearer
 from src.core.lifespan import lifespan
-from src.routers.auth_router import auth_router
 from src.utils.http_error_handler import http_error_handler
+
+from src.routers.auth_router import auth_router
 from src.routers.user_router import user_router
+from src.routers.ataud_router import ataud_router
+from src.routers.capilla_router import capilla_router
+from src.routers.vehiculo_router import vehiculo_router
 
 app = FastAPI(
     title="Inventario Funeraria Aranzabal API",
@@ -21,3 +24,9 @@ def home():
 app.include_router(auth_router, prefix="/auth", tags=["Autenticación"])
 
 app.include_router(user_router, prefix="/users", tags=["Usuarios"])
+
+app.include_router(ataud_router, prefix="/ataudes", tags=["Inventario - Ataúdes"])
+
+app.include_router(capilla_router, prefix="/capillas", tags=["Inventario - Capillas"])
+
+app.include_router(vehiculo_router, prefix="/vehiculos", tags=["Inventario - Vehículos"])
