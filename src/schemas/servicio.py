@@ -53,3 +53,9 @@ class ServicioLeerCompleto(BaseModel):
         return [item.vehiculo for item in v_list if hasattr(item, 'vehiculo')]
 
     model_config = ConfigDict(from_attributes=True)
+
+class ServicioPaginado(BaseModel):
+    total: int
+    offset: int
+    limit: int
+    data: List[ServicioLeerCompleto]

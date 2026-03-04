@@ -1,4 +1,4 @@
-from sqlmodel import Session, delete, select, or_
+from sqlmodel import Session, delete, select, or_, func
 from sqlalchemy.orm import selectinload
 from fastapi import HTTPException, status
 from datetime import date
@@ -41,11 +41,37 @@ def listar_servicios(
     nombre: Optional[str] = None,
     dni: Optional[str] = None,
     telefono: Optional[str] = None,
-) -> list[Servicio]:
-    statement = (
+    offset: int = 0,
+    limit: int = 20
+) -> dict: 
+    
+    base_query = (
         select(Servicio)
         .join(Contratante, Servicio.id_contratante == Contratante.id)
         .join(Fallecido, Servicio.id_fallecido == Fallecido.id)
+    )
+
+    if fecha:
+        base_query = base_query.where(Servicio.fecha == fecha)
+    if nombre:
+        nombre_like = f"%{nombre}%"
+        base_query = base_query.where(or_(
+            Contratante.nombre.ilike(nombre_like),
+            Fallecido.nombre.ilike(nombre_like)
+        ))
+    if dni:
+        base_query = base_query.where(or_(
+            Contratante.dni == dni,
+            Fallecido.dni == dni
+        ))
+    if telefono:
+        base_query = base_query.where(Contratante.telefono == telefono)
+
+    total_query = select(func.count()).select_from(base_query.subquery())
+    total = session.exec(total_query).one()
+
+    statement = (
+        base_query
         .options(
             selectinload(Servicio.fallecido),
             selectinload(Servicio.contratante),
@@ -53,33 +79,18 @@ def listar_servicios(
             selectinload(Servicio.capilla),
             selectinload(Servicio.vehiculos_asignados).selectinload(ServicioVehiculo.vehiculo),
         )
+        .offset(offset)
+        .limit(limit)
     )
+    
+    resultados = session.exec(statement).all()
 
-    if fecha:
-        statement = statement.where(Servicio.fecha == fecha)
-
-    if nombre:
-        nombre_like = f"%{nombre}%"
-        statement = statement.where(
-            or_(
-                Contratante.nombre.ilike(nombre_like),
-                Fallecido.nombre.ilike(nombre_like),
-            )
-        )
-
-    if dni:
-        statement = statement.where(
-            or_(
-                Contratante.dni == dni,
-                Fallecido.dni == dni,
-            )
-        )
-
-    if telefono:
-        statement = statement.where(Contratante.telefono == telefono)
-
-    return session.exec(statement).all()
-
+    return {
+        "total": total,
+        "offset": offset,
+        "limit": limit,
+        "data": resultados
+    }
 
 def obtener_servicio(session: Session, servicio_id: int) -> Servicio:
     return _get_servicio_completo(session, servicio_id)

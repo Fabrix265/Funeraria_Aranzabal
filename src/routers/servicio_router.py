@@ -1,22 +1,28 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 
 from src.deps.db_session import SessionDep
 from src.deps.role_check import get_current_admin, get_current_user
 from src.deps.servicio_filters import filtros_servicio
-from src.schemas.servicio import ServicioCrear, ServicioLeerCompleto, ServicioBase
+from src.schemas.servicio import ServicioCrear, ServicioLeerCompleto, ServicioBase, ServicioPaginado
 import src.services.servicio_service as service
 
 servicio_router = APIRouter()
 
 
-@servicio_router.get("/", response_model=list[ServicioLeerCompleto])
+@servicio_router.get("/", response_model=ServicioPaginado)
 def listar_servicios(
     session: SessionDep,
     filtros: dict = Depends(filtros_servicio),
     token: dict = Depends(get_current_user),
+    offset: int = Query(0, ge=0, description="Registros a saltar"),
+    limit: int = Query(20, ge=1, le=100, description="Registros por página")
 ):
-    return service.listar_servicios(session, **filtros)
-
+    return service.listar_servicios(
+        session, 
+        **filtros, 
+        offset=offset, 
+        limit=limit
+    )
 
 @servicio_router.get("/{servicio_id}", response_model=ServicioLeerCompleto)
 def obtener_servicio(
@@ -25,7 +31,6 @@ def obtener_servicio(
     token: dict = Depends(get_current_user),
 ):
     return service.obtener_servicio(session, servicio_id)
-
 
 @servicio_router.post("/", response_model=ServicioLeerCompleto, status_code=201)
 def crear_servicio(
