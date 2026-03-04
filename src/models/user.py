@@ -1,11 +1,13 @@
 from sqlmodel import SQLModel, Field, Relationship
-from typing import List, Optional
+from typing import List, Optional, TYPE_CHECKING
 from enum import Enum
+
+if TYPE_CHECKING:
+    from .servicio import Servicio
 
 class CargoEnum(str, Enum):
     administrador = "administrador"
     trabajador = "trabajador"
-
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

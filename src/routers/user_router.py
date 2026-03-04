@@ -12,13 +12,13 @@ user_router = APIRouter()
 def crear_usuario(
     user_in: UserCrear, 
     db: SessionDep, 
-    token: dict = Depends(decode_token)
+    #token: dict = Depends(decode_token)
 ):
-    if token.get("cargo") != CargoEnum.administrador:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, 
-            detail="Solo los administradores pueden crear usuarios"
-        )
+    #if token.get("cargo") != CargoEnum.administrador:
+    #    raise HTTPException(
+    #        status_code=status.HTTP_403_FORBIDDEN, 
+    #        detail="Solo los administradores pueden crear usuarios"
+    #    )
     return UserService.crear_usuario(db, user_in)
 
 @user_router.get("/", response_model=List[UserLeer])

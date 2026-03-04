@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
 from src.models.ataud import TipoAtaud
 
@@ -19,3 +19,4 @@ class AtaudModificar(BaseModel):
 
 class AtaudLeer(AtaudBase):
     id: int
+    model_config = ConfigDict(from_attributes=True)

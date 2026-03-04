@@ -9,4 +9,7 @@ class ServicioVehiculo(SQLModel, table=True):
     id_vehiculo: int = Field(foreign_key="vehiculo.id", nullable=False)
     
     servicio: "Servicio" = Relationship(back_populates="vehiculos_asignados")
-    vehiculo: "Vehiculo" = Relationship(back_populates="servicios")
+    vehiculo: "Vehiculo" = Relationship(
+        back_populates="servicios",
+        sa_relationship_kwargs={"lazy": "selectin"}
+    )

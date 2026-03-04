@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Query
 from typing import List, Optional
 from src.deps.db_session import SessionDep
-from src.deps.role_check import get_current_admin, get_current_user # IMPORTADOS DE DEPS
+from src.deps.role_check import get_current_admin, get_current_user
 from src.services.ataud_service import AtaudService
 from src.schemas.ataud import AtaudLeer, AtaudCrear, AtaudModificar
 from src.models.ataud import TipoAtaud
