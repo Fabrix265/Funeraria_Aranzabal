@@ -16,7 +16,7 @@
 `http://localhost:8000/docs`
 `http://localhost:8000/redoc`
 
-# API de Gestion Funeraria - Sistema "Eternity"
+# API de Gestion Funeraria
 
 Este sistema es una API robusta construida con FastAPI y SQLModel, disenada para gestionar el ciclo completo de servicios funebres, inventarios y roles de usuario.
 
