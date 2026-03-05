@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends, Query
 from typing import List, Optional
+
 from src.deps.db_session import SessionDep
 from src.deps.role_check import get_current_admin, get_current_user
 from src.services.ataud_service import AtaudService
 from src.schemas.ataud import AtaudLeer, AtaudCrear, AtaudModificar
 from src.models.ataud import TipoAtaud
+from src.schemas.stock import StockUpdate
 
 ataud_router = APIRouter()
 
@@ -43,3 +45,12 @@ def eliminar_ataud(
     _ = Depends(get_current_admin)
 ):
     return AtaudService.eliminar(db, ataud_id)
+
+@ataud_router.patch("/{ataud_id}/stock", response_model=AtaudLeer)
+def actualizar_stock_ataud(
+    ataud_id: int, 
+    stock_in: StockUpdate, 
+    db: SessionDep, 
+    _ = Depends(get_current_admin)
+):
+    return AtaudService.actualizar_stock(db, ataud_id, stock_in.cantidad)

@@ -57,3 +57,19 @@ class AtaudService:
         db.delete(db_ataud)
         db.commit()
         return {"message": "Ataud eliminado"}
+    
+    @staticmethod
+    def actualizar_stock(db: Session, ataud_id: int, cantidad: int):
+        db_ataud = db.get(Ataud, ataud_id)
+        if not db_ataud:
+            raise HTTPException(status_code=404, detail="Ataud no encontrado")
+        
+        nuevo_stock = db_ataud.stock + cantidad
+        if nuevo_stock < 0:
+            raise HTTPException(status_code=400, detail="El stock resultante no puede ser negativo")
+        
+        db_ataud.stock = nuevo_stock
+        db.add(db_ataud)
+        db.commit()
+        db.refresh(db_ataud)
+        return db_ataud

@@ -44,3 +44,19 @@ class CapillaService:
         db.delete(db_capilla)
         db.commit()
         return {"message": f"Capilla '{db_capilla.modelo}' eliminada correctamente"}
+    
+    @staticmethod
+    def actualizar_stock(db: Session, capilla_id: int, cantidad: int):
+        db_capilla = db.get(Capilla, capilla_id)
+        if not db_capilla:
+            raise HTTPException(status_code=404, detail="Capilla no encontrada")
+        
+        nuevo_stock = db_capilla.stock + cantidad
+        if nuevo_stock < 0:
+            raise HTTPException(status_code=400, detail="El stock resultante no puede ser negativo")
+        
+        db_capilla.stock = nuevo_stock
+        db.add(db_capilla)
+        db.commit()
+        db.refresh(db_capilla)
+        return db_capilla
