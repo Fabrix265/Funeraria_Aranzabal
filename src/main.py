@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+
 from src.core.lifespan import lifespan
 from src.utils.http_error_handler import http_error_handler
 
@@ -16,6 +18,14 @@ app = FastAPI(
     title="Inventario Funeraria Aranzabal API",
     version="1.0",
     lifespan=lifespan
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Permite todos, se deberia cambiar por la URL del frontend en producción
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.middleware("http")(http_error_handler)
