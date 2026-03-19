@@ -4,11 +4,8 @@ from datetime import date
 from decimal import Decimal
 
 from src.models.servicio import TipoPago
-from src.schemas.fallecido import FallecidoCrear, FallecidoLeer
-from src.schemas.contratante import ContratanteCrear, ContratanteLeer
-from src.schemas.ataud import AtaudLeer
-from src.schemas.capilla import CapillaLeer
-from src.schemas.vehiculo import VehiculoLeer
+from src.schemas.fallecido import FallecidoCrear
+from src.schemas.contratante import ContratanteCrear
 
 class ServicioBase(BaseModel):
     id_ataud: Optional[int] = None
@@ -32,6 +29,20 @@ class ServicioCrear(ServicioBase):
     fallecido: FallecidoCrear 
     contratante: ContratanteCrear
     ids_vehiculos: List[int] = []
+
+class ServicioEditar(BaseModel):
+    id_ataud: Optional[int] = None
+    id_capilla: Optional[int] = None
+    direccion_velacion: Optional[str] = None
+    tipo_pago: Optional[TipoPago] = None
+    costo: Optional[Decimal] = None
+    arreglo_flora: Optional[bool] = None
+    fecha: Optional[date] = None
+    cantidad_cargadores: Optional[int] = None
+    director_sepelio: Optional[bool] = None
+    fallecido: Optional[FallecidoCrear] = None
+    contratante: Optional[ContratanteCrear] = None
+    ids_vehiculos: Optional[List[int]] = None
 
 class ServicioLeerCompleto(BaseModel):
     id: int

@@ -20,15 +20,16 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+app.middleware("http")(http_error_handler)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], # Permite todos, se deberia cambiar por la URL del frontend en producción
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"]
 )
-
-app.middleware("http")(http_error_handler)
 
 @app.get("/", tags=["Home"])
 def home():
