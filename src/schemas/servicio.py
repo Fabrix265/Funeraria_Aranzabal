@@ -1,8 +1,9 @@
 from pydantic import BaseModel, Field, ConfigDict, field_serializer, field_validator
 from typing import Any, List, Optional
 from datetime import date
-from src.models.servicio import TipoPago
+from decimal import Decimal
 
+from src.models.servicio import TipoPago
 from src.schemas.fallecido import FallecidoCrear, FallecidoLeer
 from src.schemas.contratante import ContratanteCrear, ContratanteLeer
 from src.schemas.ataud import AtaudLeer
@@ -14,6 +15,7 @@ class ServicioBase(BaseModel):
     id_capilla: int
     direccion_velacion: str
     tipo_pago: TipoPago
+    costo: Decimal = Field(ge=0, description="Costo total del servicio")
     arreglo_flora: bool = False
     fecha: date = Field(default_factory=date.today)
     cantidad_cargadores: Optional[int] = Field(default=None) 
@@ -35,7 +37,8 @@ class ServicioLeerCompleto(BaseModel):
     id: int
     id_usuario: int
     direccion_velacion: str
-    tipo_pago: str 
+    tipo_pago: str
+    costo: Decimal
     arreglo_flora: bool
     fecha: date
     cantidad_cargadores: Optional[int] = None

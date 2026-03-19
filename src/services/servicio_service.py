@@ -147,6 +147,7 @@ def crear_servicio(session: Session, datos: ServicioCrear, id_usuario: int) -> S
             id_fallecido=fallecido.id,
             direccion_velacion=datos.direccion_velacion,
             tipo_pago=datos.tipo_pago,
+            costo=datos.costo,
             arreglo_flora=datos.arreglo_flora,
             fecha=datos.fecha,
             cantidad_cargadores=datos.cantidad_cargadores,

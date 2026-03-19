@@ -2,6 +2,7 @@ from sqlmodel import SQLModel, Field, Relationship
 from typing import List, Optional, TYPE_CHECKING
 from datetime import date
 from enum import Enum
+from decimal import Decimal
 
 if TYPE_CHECKING:
     from src.models.user import User
@@ -16,6 +17,7 @@ from src.models.servicio_vehiculo import ServicioVehiculo
 class TipoPago(str, Enum):
     directo = "directo"
     seguro = "seguro"
+    mixto = "mixto"
 
 class Servicio(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -30,6 +32,7 @@ class Servicio(SQLModel, table=True):
     # Datos
     direccion_velacion: str = Field(nullable=False, max_length=200)
     tipo_pago: TipoPago = Field(nullable=False, index=True)
+    costo: Decimal = Field(default=0.0, decimal_places=2)
     arreglo_flora: bool = Field(default=False)
     fecha: date = Field(nullable=False, index=True)
     cantidad_cargadores: Optional[int] = Field(default=None)

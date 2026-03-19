@@ -70,6 +70,6 @@ Control detallado de los insumos fisicos.
 | Inventario  | Ver Catalogo                | Si         | Si            |
 | Inventario  | Ajustar Stock / Precios     | No         | Si            |
 
-## Proximos Pasos Sugeridos
+## Proximos Pasos
 
 - Implementacion del modulo de machine learning para el futuro
